@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thread Archive & Restart"
+  short_description: "Decide and execute Codex thread archive-restart with handoff"
+  default_prompt: "判断线程是否需要归档重开，并按交接包流程执行"
