@@ -21,24 +21,28 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Validate skill structure
-        run: python scripts/validate_skill.py .
+        run: python scripts/validate_skill.py "${{ github.workspace }}"
 
       - name: Unit tests (stdlib unittest)
         run: python -m unittest discover -s tests -v
 
-      - name: Smoke: --check on mixed fixture exits 3 (ARCHIVE)
+      - name: "Smoke: --check on mixed fixture exits 3 (ARCHIVE)"
         shell: bash
         run: |
+          set +e
           python scripts/measure_thread_context.py --check --sessions tests/fixtures/sessions >/dev/null
           code=$?
+          set -e
           echo "exit=$code (expected 3)"
           test "$code" -eq 3
 
-      - name: Smoke: raised thresholds leave only WARN (exit 2)
+      - name: "Smoke: raised thresholds leave only WARN (exit 2)"
         shell: bash
         run: |
+          set +e
           python scripts/measure_thread_context.py --check --sessions tests/fixtures/sessions \
             --threshold-turn 999999999 --threshold-cum 999999999 >/dev/null
           code=$?
+          set -e
           echo "exit=$code (expected 2)"
           test "$code" -eq 2
